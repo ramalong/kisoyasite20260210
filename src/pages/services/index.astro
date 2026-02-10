@@ -1,0 +1,131 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import site from "../../content/site.json";
+import services from "../../content/services.json";
+
+const BULLET_LIMIT = 4;
+
+const list = Array.isArray(services) ? services : [];
+---
+
+<BaseLayout title={`活動内容｜${site.siteName}`} description={site.description}>
+  <main>
+    <section class="section">
+      <div class="container">
+        <h1 class="h2">活動内容</h1>
+        <p class="p">
+          心理相談・学習支援・表現活動など、目的に合わせて選べます。詳細は各ページをご覧ください。
+        </p>
+
+        <div class="grid-2" style="margin-top:18px;">
+          {
+            list.map((s) => {
+              const bullets = Array.isArray(s.bullets) ? s.bullets : [];
+              const head = bullets.slice(0, BULLET_LIMIT);
+              const restCount = Math.max(0, bullets.length - head.length);
+
+              return (
+                <article class="card">
+                  <div style="display:flex; flex-direction:column; gap:10px;">
+                    <div>
+                      <div style="font-weight:700; font-size:1.05rem;">
+                        {s.title}
+                      </div>
+                      {s.summary && (
+                        <div class="small" style="margin-top:8px;">
+                          {s.summary}
+                        </div>
+                      )}
+                    </div>
+
+                    {head.length ? (
+                      <ul style="margin:0; padding-left:18px; color:var(--muted);">
+                        {head.map((b) => (
+                          <li>
+                            <span style="color:var(--fg);">{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : null}
+
+                    {restCount > 0 && (
+                      <div class="small" style="opacity:.85;">
+                        ほか {restCount} 件（詳細ページに掲載）
+                      </div>
+                    )}
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
+                      <a class="btn primary" href={s.href}>
+                        詳細を見る
+                      </a>
+                      <a class="btn" href="/#contact">
+                        相談する
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              );
+            })
+          }
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  /* Use local styles to override global .card for this page to match Staff Cards */
+  .card {
+    /* Staff Theme: Glass Base */
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    /* Palette: Cherry Blossom #edafb8 */
+    background: #edafb8;
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  }
+  .card:hover::before {
+    opacity: 1;
+  }
+
+  .btn {
+    border-color: #b0c4b1;
+    color: #4a5759;
+  }
+  .btn:hover {
+    background: #edafb8;
+    color: #fff;
+    border-color: #edafb8;
+  }
+  .btn.primary {
+    background: #edafb8;
+    color: #ffffff;
+    border-color: #edafb8;
+  }
+  .btn.primary:hover {
+    background: #ffffff;
+    color: #edafb8;
+  }
+</style>

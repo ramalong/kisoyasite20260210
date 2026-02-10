@@ -1,0 +1,74 @@
+﻿---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import site from "../../content/site.json";
+import locations from "../../content/locations.json";
+import hours from "../../content/hours.json";
+
+const hourItems = Array.isArray(hours?.items) ? hours.items : [];
+const hourNotes = hours?.notes ?? "";
+---
+
+<BaseLayout title={`アクセス｜${site.siteName}`} description={site.description}>
+  <main>
+    <section class="section">
+      <div class="container">
+        <h1 class="h2">アクセス</h1>
+        <p class="p">所在地・連絡先・地図を掲載しています。</p>
+
+        <!-- 営業時間（共通ブロック） -->
+        <div class="card" style="margin-top:14px;">
+          <div style="font-weight:700;">{hours?.title ?? "営業時間"}</div>
+
+          {hourItems.length ? (
+            <ul style="margin:10px 0 0 18px; color:var(--muted);">
+              {hourItems.map((x) => (
+                <li>
+                  <span style="font-weight:600; color:var(--fg);">{x.label}</span>：{x.value}
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div class="small" style="margin-top:10px;">営業時間は準備中です。</div>
+          )}
+
+          {hourNotes && <div class="small" style="margin-top:10px;">{hourNotes}</div>}
+        </div>
+
+        <!-- 2拠点の詳細 -->
+        <div class="grid-2" style="margin-top:18px;">
+          {locations.map((l) => (
+            <article class="card">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+                <div style="min-width:0;">
+                  <div style="font-weight:700;">{l.name}</div>
+                  <div class="small" style="margin-top:8px;">{l.address}</div>
+
+                  <div class="small" style="margin-top:8px;">
+                    TEL：
+                    <a href={`tel:${l.tel}`} style="text-decoration:underline; color:var(--fg);">
+                      {l.tel}
+                    </a>
+                  </div>
+
+                  {l.notes && (
+                    <div class="small" style="margin-top:10px; color:var(--muted);">
+                      {l.notes}
+                    </div>
+                  )}
+                </div>
+
+                {l.mapEmbedUrl && (
+                  <a class="btn" href={l.mapEmbedUrl} target="_blank" rel="noreferrer">
+                    Google Mapsで開く
+                  </a>
+                )}
+              </div>
+
+              {/* 埋め込みに切り替える場合は、ここにiframe領域を追加（mapEmbedUrlをembed URLにする） */}
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+</BaseLayout>

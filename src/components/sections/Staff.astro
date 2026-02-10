@@ -1,0 +1,86 @@
+﻿---
+import staff from "../../content/staff.json";
+import "../../styles/sections/staff.css";
+---
+
+<section class="section staff-section" id="staff">
+  <div class="container staff-container">
+    <div class="staff-header">
+      <h2 class="staff-title">スタッフ紹介</h2>
+      <div class="staff-decoration"></div>
+    </div>
+
+    <div class="staff-body">
+      <div class="staff-grid">
+        {
+          staff.map((p) => (
+            <div class="staff-card">
+              <div class="staff-card-header">
+                <div class="staff-name">{p.name}</div>
+                <span class="staff-role">{p.role}</span>
+              </div>
+              <div class="staff-bio">
+                <ul>
+                  {Array.isArray(p.bio) ? (
+                    p.bio.map((line) => <li>{line}</li>)
+                  ) : (
+                    <li>{p.bio}</li>
+                  )}
+                </ul>
+              </div>
+              <div class="staff-tags">
+                {p.tags?.map((t) => (
+                  <span class="staff-tag">{t}</span>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const staffSection = document.querySelector(".staff-section");
+  if (staffSection) {
+    const header = staffSection.querySelector(".staff-header");
+    const grid = staffSection.querySelector(".staff-grid");
+    const cards = staffSection.querySelectorAll(".staff-card");
+
+    // Header Fade In
+    gsap.from(header, {
+      scrollTrigger: {
+        trigger: staffSection,
+        start: "top 80%",
+        toggleActions: "play none none reverse",
+      },
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      ease: "power2.out",
+    });
+
+    // Cards Stagger (Container Trigger)
+    if (cards.length > 0) {
+      gsap.from(cards, {
+        scrollTrigger: {
+          trigger: ".staff-grid", // Trigger when the grid enters
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: "back.out(1.7)",
+        clearProps: "transform", // Clear inline transform to allow CSS hover effect
+      });
+    }
+  }
+</script>

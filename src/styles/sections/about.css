@@ -1,0 +1,222 @@
+/* src/styles/sections/about.css */
+
+/* Section Layout */
+.about-section {
+  position: relative;
+  overflow: hidden;
+  /* background-color: var(--bg); Removed */
+  background-color: transparent;
+  --accent: #5C6F2B;
+  --line: #5C6F2B;
+}
+
+/* Background Grid (Mirroring Hero's L1) */
+/* Background Grid (Mirroring Hero's L1) */
+/* Grid background removed in favor of global grainy texture */
+
+.about-container {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+  padding: 40px 0;
+}
+
+/* Header (Vertical Title) */
+.about-header {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row-reverse; /* Line on right side of text if needed, or left. Let's do simple vertical. */
+  gap: 16px;
+  height: auto;
+}
+
+.about-title {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: clamp(32px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--fg);
+  margin: 0;
+  height: 300px; /* Min height to maintain presence */
+}
+
+.about-decoration {
+  width: 4px;
+  height: 100px;
+  background-color: var(--accent); /* #3F9AAE */
+  border-radius: 2px;
+  margin-top: 10px;
+}
+
+/* Body Content */
+.about-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.about-desc {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: var(--fg);
+  background: rgba(255, 255, 255, 0.4);
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 20px rgba(63, 154, 174, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+/* Pillars Grid */
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+/* Cards (Glassmorphism & Wireframe) */
+.pillar-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 20px;
+  text-decoration: none;
+  color: var(--fg);
+
+  /* Glass Style */
+  background: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 20px rgba(63, 154, 174, 0.15);
+  backdrop-filter: blur(8px);
+
+  /* transition: all 0.3s ease; */
+  /* transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease; */
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.pillar-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 12px 30px rgba(63, 154, 174, 0.15); /* Tinted shadow */
+  border-color: var(--accent);
+}
+
+/* Icons (Wireframe Geometric) */
+.pillar-icon {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.pillar-icon::before {
+  content: "";
+  display: block;
+  border: 2px solid var(--accent); /* Theme color wireframe */
+}
+
+/* Ring */
+.shape-ring::before {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+/* Square */
+.shape-square::before {
+  width: 30px;
+  height: 30px;
+  border-radius: 4px;
+}
+/* Triangle (Hollow/Outline) */
+.shape-tri::before {
+  width: 30px;
+  height: 30px;
+  background-color: var(--accent);
+  border: none;
+  /* Outer triangle (CW) -> Inner triangle (CCW) to create hole */
+  clip-path: polygon(
+    50% 0%,
+    100% 100%,
+    0% 100%,
+    50% 0%,
+    50% 4px,
+    4px calc(100% - 2.5px),
+    calc(100% - 4px) calc(100% - 2.5px),
+    50% 4px
+  );
+  transform: none;
+  border-radius: 0;
+}
+
+.pillar-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pillar-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.pillar-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+/* Mobile Responsive */
+@media (max-width: 900px) {
+  .about-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .about-header {
+    width: 100%;
+    flex-direction: row; /* Horizontal title on mobile again? Or keep vertical? */
+    /* Let's keep vertical if it fits, or switch to horizontal for space.
+       Vertical title on top takes a lot of height. Let's switch to horizontal for mobile.
+    */
+    align-items: center;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 12px;
+  }
+
+  .about-title {
+    writing-mode: horizontal-tb;
+    height: auto;
+    font-size: 28px;
+  }
+
+  .about-decoration {
+    display: none;
+  }
+
+  .pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .pillar-card {
+    flex-direction: row;
+    text-align: left;
+    padding: 16px;
+  }
+
+  .pillar-icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+  }
+}

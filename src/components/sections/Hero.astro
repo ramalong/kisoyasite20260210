@@ -1,0 +1,38 @@
+﻿---
+import site from "../../content/site.json";
+import "../../styles/sections/Hero.css";
+---
+
+<section class="section hero-section">
+  <!-- Visual Layer (Canvas) -->
+  <div class="hero-visual-container" id="hero-visual-container">
+    <!-- Canvas will be appended here by Three.js -->
+  </div>
+
+  <!-- Content Overlay (Foreground) -->
+  <div class="hero-container">
+    <div class="hero-content">
+      <h1 class="hero-title">{site.siteName || "TOYBOX"}</h1>
+      <p class="hero-desc">{site.description || "MOUSE OVER TO PLAY"}</p>
+      <div class="hero-actions">
+        <a class="btn hero-primary" href={site.primaryCta?.href || "#"}
+          >{site.primaryCta?.label || "Explore"}</a
+        >
+        <a class="btn hero-secondary" href={site.secondaryCta?.href || "#"}
+          >{site.secondaryCta?.label || "Contact"}</a
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { initHeroScene } from "../../lib/hero-scene";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const container = document.getElementById("hero-visual-container");
+    if (container) {
+      initHeroScene(container);
+    }
+  });
+</script>

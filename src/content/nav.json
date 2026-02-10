@@ -1,0 +1,15 @@
+﻿{
+  "header": [
+    { "label": "ホーム", "href": "/#top" },
+    { "label": "基礎屋について", "href": "/#about" },
+    { "label": "活動内容", "href": "/#services" },
+    { "label": "アクセス", "href": "/#access" },
+    { "label": "お問い合わせ", "href": "/#contact" }
+  ],
+  "footer": [
+    { "label": "基礎屋について", "href": "/#about" },
+    { "label": "活動内容", "href": "/#services" },
+    { "label": "アクセス", "href": "/#access" },
+    { "label": "お問い合わせ", "href": "/#contact" }
+  ]
+}

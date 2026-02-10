@@ -1,0 +1,98 @@
+﻿---
+import "../../styles/sections/about.css";
+---
+
+<section class="section about-section" id="about">
+  <!-- Geometric Background (Subtle) -->
+
+  <div class="container about-container">
+    <!-- Header: Vertical Title -->
+    <div class="about-header">
+      <h2 class="about-title">基礎屋について</h2>
+      <div class="about-decoration"></div>
+    </div>
+
+    <!-- Body: Content & Pillars -->
+    <div class="about-body">
+      <p class="about-desc">
+        心理教育相談室 基礎屋は「カウンセリング」、「学習支援」、「表現活動」を三本柱とする支援施設です。 臨床心理士、公認心理師が在籍しており、カウンセリング・心理療法の実施や学力不振、発達障害や不登校等、子どもたちや保護者の困り感に寄り添う支援を行っています。
+      </p>
+
+      <div class="pillars">
+        <a class="pillar-card" href="#service-counseling">
+          <span class="pillar-icon shape-ring" aria-hidden="true"></span>
+          <div class="pillar-text">
+            <div class="pillar-title">心理教育相談</div>
+            <div class="pillar-sub">公認心理師・臨床心理士によるカウンセリング、心理療法、教育相談</div>
+          </div>
+        </a>
+
+        <a class="pillar-card" href="#service-learning">
+          <span class="pillar-icon shape-tri" aria-hidden="true"></span>
+          <div class="pillar-text">
+            <div class="pillar-title">学習支援</div>
+            <div class="pillar-sub">
+              ひとりひとりに合わせたサポート
+            </div>
+          </div>
+        </a>
+
+        <a class="pillar-card" href="#service-expression">
+          <span class="pillar-icon shape-square" aria-hidden="true"></span>
+          <div class="pillar-text">
+            <div class="pillar-title">表現支援</div>
+            <div class="pillar-sub">
+              安全・安心、否定されない環境で表現する体験を詰める場所
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // About Section Animations
+  const aboutSection = document.querySelector(".about-section");
+  if (aboutSection) {
+    const header = aboutSection.querySelector(".about-header");
+    const desc = aboutSection.querySelector(".about-desc");
+    const pillars = aboutSection.querySelectorAll(".pillar-card");
+
+    // Headers
+    gsap.from([header, desc], {
+      scrollTrigger: {
+        trigger: aboutSection,
+        start: "top 80%",
+        toggleActions: "play none none reverse",
+      },
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      stagger: 0.2,
+      ease: "power2.out",
+    });
+
+    // Pillars Stagger (Container Trigger)
+    if (pillars.length > 0) {
+      gsap.from(pillars, {
+        scrollTrigger: {
+          trigger: ".pillars", // Trigger when the grid enters
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "back.out(1.7)",
+        clearProps: "transform", // Clear inline transform to allow CSS hover
+      });
+    }
+  }
+</script>

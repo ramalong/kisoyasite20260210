@@ -1,0 +1,85 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="ページが見つかりません | 心理教育相談室・基礎屋"
+  description="お探しのページは見つかりませんでした。"
+>
+  <div class="container container-404">
+    <div class="glass-card">
+      <h1 class="title-404">404 Not Found</h1>
+      <p class="desc-404">
+        お探しのページは削除されたか、URLが変更された可能性があります。<br />
+        URLをご確認いただくか、トップページよりご希望のコンテンツをお探しください。
+      </p>
+      <a href="/" class="btn primary">トップページへ戻る</a>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .container-404 {
+    padding: 120px 20px 100px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .glass-card {
+    /* Staff Theme: Glass Base */
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    border-radius: 20px;
+    padding: 60px 40px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    /* Palette: Cherry Blossom #edafb8 */
+    background: #edafb8;
+  }
+
+  .title-404 {
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+    /* Palette: Iron Grey #4a5759 */
+    color: #4a5759;
+    font-weight: 700;
+  }
+
+  .desc-404 {
+    margin-bottom: 40px;
+    /* Palette: Iron Grey #4a5759 */
+    color: #4a5759;
+    font-size: 1.1rem;
+    line-height: 1.8;
+  }
+
+  .btn.primary {
+    background: #edafb8; /* Cherry Blossom */
+    color: #ffffff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn.primary:hover {
+    background: #ffffff;
+    color: #edafb8;
+    box-shadow: 0 4px 12px rgba(237, 175, 184, 0.3);
+  }
+</style>

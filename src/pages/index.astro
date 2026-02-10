@@ -1,0 +1,31 @@
+﻿---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import site from "../content/site.json";
+
+import Hero from "../components/sections/Hero.astro";
+import About from "../components/sections/About.astro";
+import Staff from "../components/sections/Staff.astro";
+import Services from "../components/sections/Services.astro";
+import Access from "../components/sections/Access.astro";
+import Contact from "../components/sections/Contact.astro";
+
+import WireframeBackground from "../components/ui/WireframeBackground.astro";
+---
+
+<BaseLayout title={site.siteName} description={site.description}>
+  <Hero />
+  <div style="position: relative;">
+    <!-- Unified Background (Bottom Layer) -->
+
+    <WireframeBackground />
+
+    <!-- Content Sections (Transparent Backgrounds) -->
+    <div style="position: relative; z-index: 2;">
+      <About />
+      <Services />
+      <Access />
+      <Contact />
+      <Staff />
+    </div>
+  </div>
+</BaseLayout>

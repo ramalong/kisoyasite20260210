@@ -1,0 +1,137 @@
+﻿---
+import locations from "../../content/locations.json";
+import hours from "../../content/hours.json";
+
+const hourItems = Array.isArray(hours?.items) ? hours.items : [];
+const hourNotes = hours?.notes ?? "";
+---
+
+<section
+  class="section access-section"
+  id="access"
+  style="position:relative; overflow:hidden; background-color: transparent; --accent: #7f5539; --line: #7f5539;"
+>
+  <div class="container">
+    <h2
+      class="h2 access-title"
+      style="color: #EEEEEE; font-size: clamp(33px, 2.5vw, 44px);"
+    >
+      {hours?.title ?? "アクセス"}
+    </h2>
+
+    <div class="grid-2 access-grid">
+      {
+        locations.map((l) => (
+          <div class="card access-card">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+              <div>
+                <div style="font-weight:700;">{l.name}</div>
+                <div class="small" style="margin-top:6px;">
+                  {l.address}
+                </div>
+                <div class="small" style="margin-top:6px;">
+                  TEL：
+                  <a
+                    href={`tel:${l.tel}`}
+                    style="text-decoration:underline; color:var(--fg);"
+                  >
+                    {l.tel}
+                  </a>
+                </div>
+              </div>
+
+              {l.mapEmbedUrl && (
+                <a
+                  class="btn"
+                  href={l.mapEmbedUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Google Mapsで開く
+                </a>
+              )}
+            </div>
+
+            {l.notes && (
+              <div class="small" style="margin-top:10px;">
+                {l.notes}
+              </div>
+            )}
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="card access-card" style="margin-top:20px;">
+      <div style="font-weight:700;">営業時間</div>
+
+      {
+        hourItems.length ? (
+          <ul style="margin:10px 0 0 18px; color:var(--muted);">
+            {hourItems.map((x) => (
+              <li>
+                <span style="font-weight:600; color:var(--fg);">{x.label}</span>
+                ：{x.value}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div class="small" style="margin-top:10px;">
+            営業時間は準備中です。
+          </div>
+        )
+      }
+
+      {
+        hourNotes && (
+          <div class="small" style="margin-top:10px;">
+            {hourNotes}
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const accessSection = document.querySelector(".access-section");
+  if (accessSection) {
+    const title = accessSection.querySelector(".access-title");
+    const grid = accessSection.querySelector(".access-grid");
+    const cards = accessSection.querySelectorAll(".access-card");
+
+    // Title Animation
+    gsap.from(title, {
+      scrollTrigger: {
+        trigger: accessSection,
+        start: "top 80%",
+        toggleActions: "play none none reverse",
+      },
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      ease: "power2.out",
+    });
+
+    // Cards Stagger
+    if (grid && cards.length > 0) {
+      gsap.from(cards, {
+        scrollTrigger: {
+          trigger: grid,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2,
+        ease: "power2.out",
+      });
+    }
+  }
+</script>

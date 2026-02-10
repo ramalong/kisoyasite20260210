@@ -1,0 +1,349 @@
+---
+
+---
+
+<div id="wireframe-canvas-container" class="wireframe-container"></div>
+<div class="grain-overlay"></div>
+
+<!-- SVG Noise Filter (Reused from UnifiedBackground) -->
+<svg style="display: none;">
+  <filter id="noiseFilter">
+    <feTurbulence
+      type="fractalNoise"
+      baseFrequency="0.65"
+      numOctaves="3"
+      stitchTiles="stitch"></feTurbulence>
+  </filter>
+</svg>
+
+<style>
+  .wireframe-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1; /* Background layer */
+    /* Background set by Three.js */
+    pointer-events: none;
+  }
+
+  .grain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 1; /* Same level as canvas, sitting on top via DOM order */
+    filter: url(#noiseFilter);
+    mix-blend-mode: overlay;
+  }
+</style>
+
+<script>
+  import * as THREE from "three";
+  import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // --- Configuration ---
+  const CONFIG = {
+    // Initial Color (Hero / Default)
+    bgColor: 0xfaf9f6,
+
+    // Wireframe Settings
+    lineColor: 0x8892a0,
+    lineOpacity: 0.35,
+    fillColor: 0xffffff,
+    fillOpacity: 0.15,
+    fogDensity: 0.04,
+    modelCount: 18,
+    scrollEffect: 0.002,
+    mouseEffect: 0.03,
+
+    // Dimensions
+    targetSize: 1.5,
+    rangeX: 14,
+    rangeY: 35,
+    rangeZ: 10,
+  };
+
+  const ALL_MODELS = [
+    "Planet.glb",
+    "Stag.glb",
+    "Light Desk.glb",
+    "Shiba Inu.glb",
+    "cartoon banana car.glb",
+    "Tree.glb",
+    "Clouds.glb",
+    "Cow.glb",
+    "Toilet.glb",
+    "Bathroom Toilet Paper.glb",
+    "Toilet Paper stack.glb",
+    "Mug With Office Tool.glb",
+    "Tissue Box.glb",
+    "Houseplant.glb",
+    "Chicken.glb",
+    "Cupcake.glb",
+    "Donut.glb",
+    "Coffee cup.glb",
+    "Bottle Musterd.glb",
+    "Burger.glb",
+    "Coin.glb",
+    "Cat.glb",
+    "Pumpkin.glb",
+    "Road Cone.glb",
+    "Simple Standing Lamp.glb",
+    "Bread Half.glb",
+    "Bread Slice.glb",
+    "Pencil.glb",
+    "Pen.glb",
+    "Pen (1).glb",
+    "White Eraser.glb",
+    "clipboard.glb",
+  ];
+
+  // --- Init Scene ---
+  const container = document.getElementById("wireframe-canvas-container");
+  if (container) {
+    const scene = new THREE.Scene();
+
+    // Initial Background Color
+    const currentColor = new THREE.Color(CONFIG.bgColor);
+    const targetColor = new THREE.Color(CONFIG.bgColor);
+
+    scene.background = currentColor;
+    scene.fog = new THREE.FogExp2(CONFIG.bgColor, CONFIG.fogDensity);
+
+    const camera = new THREE.PerspectiveCamera(
+      60,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100,
+    );
+
+    camera.position.z = 12;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    // --- Materials ---
+    const wireMat = new THREE.MeshBasicMaterial({
+      color: CONFIG.lineColor,
+      wireframe: true,
+      transparent: true,
+      opacity: CONFIG.lineOpacity,
+    });
+
+    const fillMat = new THREE.MeshBasicMaterial({
+      color: CONFIG.fillColor,
+      transparent: true,
+      opacity: CONFIG.fillOpacity,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+
+    // --- Helper: Normalize Size ---
+    function normalizeModelSize(object3D: THREE.Object3D, targetSize: number) {
+      const box = new THREE.Box3().setFromObject(object3D);
+      const size = new THREE.Vector3();
+      box.getSize(size);
+      const maxDimension = Math.max(size.x, size.y, size.z);
+      if (maxDimension === 0) return;
+      const scaleFactor = targetSize / maxDimension;
+      object3D.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    }
+
+    // --- Load Models ---
+    const loader = new GLTFLoader();
+    const objectsGroup = new THREE.Group();
+    scene.add(objectsGroup);
+    const floatingObjects: THREE.Object3D[] = [];
+
+    function loadRandomModels() {
+      const shuffled = [...ALL_MODELS].sort(() => 0.5 - Math.random());
+
+      for (let i = 0; i < Math.min(CONFIG.modelCount, shuffled.length); i++) {
+        const fileName = shuffled[i];
+
+        loader.load(
+          `/models/${fileName}`,
+          (gltf) => {
+            const model = gltf.scene;
+
+            // Resize & Scale
+            normalizeModelSize(model, CONFIG.targetSize);
+            const randomVariation = 0.7 + Math.random() * 0.4;
+            model.scale.multiplyScalar(randomVariation);
+
+            // Material
+            model.traverse((child) => {
+              if ((child as THREE.Mesh).isMesh) {
+                const mesh = child as THREE.Mesh;
+                mesh.material = wireMat;
+                const fillMesh = mesh.clone();
+                fillMesh.material = fillMat;
+                model.add(fillMesh);
+              }
+            });
+
+            // Position
+            model.position.set(
+              (Math.random() - 0.5) * CONFIG.rangeX,
+              (Math.random() - 0.5) * CONFIG.rangeY,
+              (Math.random() - 0.5) * CONFIG.rangeZ,
+            );
+
+            model.rotation.set(
+              Math.random() * Math.PI,
+              Math.random() * Math.PI,
+              0,
+            );
+
+            // Animation Data
+            model.userData = {
+              rotSpeed: (Math.random() - 0.5) * 0.003,
+              floatSpeed: Math.random() * 0.001 + 0.0005,
+              floatOffset: Math.random() * Math.PI * 2,
+              initialY: model.position.y,
+            };
+
+            objectsGroup.add(model);
+            floatingObjects.push(model);
+          },
+          undefined,
+          (err) => {
+            console.warn(`Skipped: ${fileName}`);
+          },
+        );
+      }
+    }
+
+    loadRandomModels();
+
+    // --- Scroll & Mouse Interaction ---
+    let scrollY = 0;
+    window.addEventListener("scroll", () => {
+      scrollY = window.scrollY;
+    });
+
+    let mouseX = 0;
+    let mouseY = 0;
+    let targetMouseX = 0;
+    let targetMouseY = 0;
+
+    window.addEventListener("mousemove", (e) => {
+      targetMouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      targetMouseY = (e.clientY / window.innerHeight) * 2 - 1;
+    });
+
+    // --- Scroll Color Triggers ---
+    // Define Color Palette
+    const COLORS = {
+      default: "#faf9f6",
+      about: "#faf9f6",
+      services: "#faf9f6",
+      access: "#A18D6D", // Access & Contact
+    };
+
+    // Helper to update target color
+    const setTargetColor = (hex: string) => {
+      targetColor.set(hex);
+    };
+
+    // Hero -> About
+    ScrollTrigger.create({
+      trigger: "#about",
+      start: "top 60%",
+      onEnter: () => setTargetColor(COLORS.about),
+      onLeaveBack: () => setTargetColor(COLORS.default),
+    });
+
+    // About -> Services
+    ScrollTrigger.create({
+      trigger: "#services",
+      start: "top 60%",
+      onEnter: () => setTargetColor(COLORS.services),
+      onLeaveBack: () => setTargetColor(COLORS.about),
+    });
+
+    // Services -> Access
+    ScrollTrigger.create({
+      trigger: "#access",
+      start: "top 60%",
+      onEnter: () => setTargetColor(COLORS.access),
+      onLeaveBack: () => setTargetColor(COLORS.services),
+    });
+
+    // Access -> Contact (Same color, just ensuring it stays or could change if desired)
+    ScrollTrigger.create({
+      trigger: "#contact",
+      start: "top 60%",
+      onEnter: () => setTargetColor(COLORS.access),
+      onLeaveBack: () => setTargetColor(COLORS.access), // Stays same if going back to Access
+    });
+
+    // --- Animation Loop ---
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+      const time = clock.getElapsedTime();
+
+      // Smooth Color Transition
+      currentColor.lerp(targetColor, 0.05); // Adjust ease factor (0.05) for speed
+      scene.background = currentColor;
+      // Update fog color to match background for seamless depth
+      if (scene.fog) {
+        scene.fog.color.copy(currentColor);
+      }
+
+      // Camera Scroll
+      const targetCamY = -scrollY * CONFIG.scrollEffect;
+      camera.position.y += (targetCamY - camera.position.y) * 0.05;
+
+      // Mouse Interaction
+      mouseX += (targetMouseX - mouseX) * 0.05;
+      mouseY += (targetMouseY - mouseY) * 0.05;
+
+      objectsGroup.rotation.y = mouseX * CONFIG.mouseEffect;
+      objectsGroup.rotation.x = mouseY * CONFIG.mouseEffect;
+
+      // Floating Objects
+      floatingObjects.forEach((obj) => {
+        obj.rotation.x += obj.userData.rotSpeed;
+        obj.rotation.y += obj.userData.rotSpeed;
+        obj.position.y =
+          obj.userData.initialY +
+          Math.sin(time * 1 + obj.userData.floatOffset) * 0.25;
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // --- Resize Logic ---
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      if (window.innerWidth < 768) {
+        camera.position.z = 16;
+      } else {
+        camera.position.z = 12;
+      }
+    });
+
+    if (window.innerWidth < 768) {
+      camera.position.z = 16;
+    }
+  }
+</script>

@@ -1,0 +1,26 @@
+﻿[
+  {
+    "id": "tomitsuka",
+    "name": "富塚ルーム",
+    "postalCode": "432-8002",
+    "prefecture": "静岡県",
+    "city": "浜松市中央区",
+    "street": "富塚町2961-8",
+    "address": "〒432-8002 静岡県浜松市中央区富塚町2961-8",
+    "tel": "053-555-4731",
+    "mapEmbedUrl": "https://maps.app.goo.gl/keHCq3jYzLAbvnFQ7",
+    "notes": ""
+  },
+  {
+    "id": "nakajima",
+    "name": "中島ルーム",
+    "postalCode": "430-0856",
+    "prefecture": "静岡県",
+    "city": "浜松市中央区",
+    "street": "中島2-6-31",
+    "address": "〒430-0856 静岡県浜松市中央区中島2-6-31",
+    "tel": "053-555-8134",
+    "mapEmbedUrl": "https://maps.app.goo.gl/UwXuD727H7xZ41FU7",
+    "notes": ""
+  }
+]

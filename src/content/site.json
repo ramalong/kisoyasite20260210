@@ -1,0 +1,22 @@
+﻿{
+  "siteName": "基礎屋",
+  "tagline": "浜松市,心理相談,基礎屋,不登校支援,発達障害,学習支援,表現活動",
+  "siteUrl": "https://kisoya.com",
+  "ogImagePath": "/img/ogp.png",
+  "description": "浜松市の心理教育相談室 基礎屋では、個々のニーズに合った学習支援、表現活動とメンタルケア・サポートを行っています。",
+  "primaryCta": { "label": "お問い合わせ", "href": "/#contact" },
+  "secondaryCta": { "label": "活動内容を見る", "href": "/#services" },
+  "contact": {
+    "email": "kisoya1999@gmail.com",
+    "phones": [
+       { "label": "富塚ルーム", "tel": "053-555-4731" },
+       { "label": "中島ルーム", "tel": "053-555-8134" }
+    ],
+    "formUrl": "https://form1.fc2.com/form/?id=549531"
+  },
+  "social": {
+    "instagram": "https://www.instagram.com/kisoya1999/?hl=ja",
+    "facebook": "https://www.facebook.com/kisoya1999"
+  },
+  "copyrightName": "KISOYA"
+}

@@ -1,0 +1,250 @@
+@charset "UTF-8";
+
+/* src/styles/sections/services.css */
+
+.services-section {
+  /* background-color: #ffffff; */
+  background-color: transparent;
+  position: relative;
+  color: #222222;
+  --accent: #edafb8;
+  --line: #edafb8;
+}
+
+
+.services-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- Left Column: Vertical Title --- */
+.services-header {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row-reverse;
+  gap: 16px;
+  height: auto;
+  margin-right: 60px;
+  padding-top: 80px;
+  position: sticky;
+  top: 40px;
+}
+
+.services-title {
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: clamp(32px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #4a4948;
+  margin: 0;
+}
+
+.services-decoration {
+  width: 4px;
+  height: 100px;
+  background-color: #edafb8; /* Cherry Blossom */
+  border-radius: 2px;
+  margin-top: 10px;
+}
+
+/* --- Right Column: List of Services --- */
+.services-list {
+  flex: 1;
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 100px;
+}
+
+.service-block {
+  scroll-margin-top: 100px;
+}
+
+.service-row {
+  display: flex;
+  align-items: stretch;
+  gap: 30px;
+}
+
+/* Text Card */
+.service-content {
+  flex: 1;
+  /* Staff Theme: Glass Base */
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 20px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Changed from space-between */
+  gap: 24px; /* Add gap for consistent spacing */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); 
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.service-content::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--service-accent); /* Dynamic Accent */
+  opacity: 0.5;
+}
+
+/* Hover effect from Staff */
+.service-block:hover .service-content {
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+.service-block:hover .service-content::before {
+  opacity: 1;
+}
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0; /* Handled by gap */
+}
+
+.service-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #4a5759; /* Iron Grey */
+}
+
+.service-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  border: 1px solid #b0c4b1; /* Keep default or match accent? Let's match accent for consistency */
+  border-color: var(--service-accent);
+  border-radius: 30px;
+  color: #4a5759;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  background: rgba(255,255,255,0.5);
+}
+
+.service-btn:hover {
+  background-color: var(--service-accent); /* Dynamic Accent */
+  color: #ffffff;
+  border-color: var(--service-accent);
+}
+
+.service-summary {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #4a5759;
+  margin-bottom: 0; /* Handled by gap */
+}
+
+.service-bullets {
+  margin-top: auto; /* Pin to bottom */
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.service-bullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 0.95rem;
+  color: #4a5759;
+}
+
+.service-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 6px;
+  height: 6px;
+  background-color: var(--service-accent); /* Dynamic Accent */
+  border-radius: 50%;
+}
+
+/* Image */
+.service-image {
+  flex: 0 0 350px;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background-color: #f7e1d7;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.service-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.service-block:hover .service-image img {
+  transform: scale(1.05);
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+  .services-container {
+    flex-direction: column;
+    gap: 32px;
+  }
+  
+  .services-header {
+    display: flex; /* Show it! */
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 2px solid #7f5539; /* Cherry Blossom */
+    padding-bottom: 12px;
+    margin-right: 0;
+    padding-top: 0;
+    position: static;
+  }
+
+  .services-title {
+    writing-mode: horizontal-tb;
+    height: auto;
+    font-size: 28px;
+  }
+
+  .services-decoration {
+    display: none;
+  }
+
+  .service-row {
+    flex-direction: column-reverse; /* Image on top */
+    gap: 0;
+    border: 1px solid #b0c4b1;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .service-image {
+    aspect-ratio: 16/9;
+  }
+
+  /* Reset visibility/opacity issues from previous */
+  .service-block, .service-content {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+  }
+}

@@ -1,0 +1,23 @@
+---
+import site from "../../content/site.json";
+
+const siteUrl =
+  site.siteUrl || (Astro.site ? Astro.site.href : "https://kisoya.com");
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: site.siteName,
+  image: `${siteUrl}img/ogp.png`, // Placeholder image
+  url: siteUrl,
+  telephone: site.contact.phones[0]?.tel || "",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "浜松市",
+    addressCountry: "JP",
+  },
+  description: site.description,
+  sameAs: [site.social.instagram, site.social.facebook].filter(Boolean),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

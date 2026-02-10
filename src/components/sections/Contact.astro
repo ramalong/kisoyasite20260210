@@ -1,0 +1,200 @@
+﻿---
+import site from "../../content/site.json";
+import faq from "../../content/faq.json";
+
+// 連絡先（配列対応）
+const phones = Array.isArray(site?.contact?.phones) ? site.contact.phones : [];
+const email = site?.contact?.email ?? "";
+const formUrl = site?.contact?.formUrl ?? "";
+
+// FAQ（配列順そのまま）
+// 「お問い合わせ」カテゴリをFAQとして見せたくない場合は除外する
+const faqItems = Array.isArray(faq)
+  ? faq.filter((x) => x.category === "よくある質問（Q&A）")
+  : [];
+---
+
+<section
+  class="section contact-section"
+  id="contact"
+  style="position:relative; overflow:hidden; background-color: transparent; --accent: #7f5539; --line: #7f5539;"
+>
+  <div class="container">
+    <h2
+      class="h2 contact-title"
+      style="color: #EEEEEE; font-size: clamp(33px, 2.5vw, 44px);"
+    >
+      お問い合わせ
+    </h2>
+    <div class="grid-2 contact-grid">
+      <div class="card contact-card">
+        <div style="font-weight:700;">連絡先</div>
+
+        <div class="small" style="margin-top:8px;">
+          Email：
+          {
+            email ? (
+              <a
+                href={`mailto:${email}`}
+                style="color:var(--fg); text-decoration:underline;"
+              >
+                {email}
+              </a>
+            ) : (
+              "未設定"
+            )
+          }
+        </div>
+
+        <div class="small" style="margin-top:10px;">
+          TEL：
+          {
+            phones.length ? (
+              <ul
+                style="
+                margin:8px 0 0;
+                padding-left:18px;
+                display:flex;
+                flex-direction:column;
+                gap:6px;
+                color:var(--muted);
+              "
+              >
+                {phones.map((p) => (
+                  <li>
+                    <span style="font-weight:600; color:var(--fg);">
+                      {p.label}：
+                    </span>
+                    <a
+                      href={`tel:${p.tel}`}
+                      style="color:var(--fg); text-decoration:underline;"
+                    >
+                      {p.tel}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <span style="margin-left:6px;">未設定</span>
+            )
+          }
+        </div>
+
+        <div style="margin-top:20px;">
+          <p class="contact-cta">見学・体験・相談の方はこちらから</p>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            {
+              formUrl ? (
+                <a
+                  class="btn primary"
+                  href={formUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  フォームを開く
+                </a>
+              ) : (
+                <span class="badge">フォームURL未設定</span>
+              )
+            }
+          </div>
+        </div>
+
+        <style>
+          .contact-cta {
+            font-size: 0.95rem;
+            color: #7f5539; /* Cherry Blossom */
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+          }
+          .contact-cta::after {
+            content: "";
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid #7f5539;
+            transform: translateY(2px);
+          }
+        </style>
+      </div>
+
+      <div class="card contact-card">
+        <div
+          style="display:flex; align-items:center; justify-content:space-between; gap:10px;"
+        >
+          <div style="font-weight:700;">よくある質問（全件）</div>
+          <span class="badge">{faqItems.length}件</span>
+        </div>
+
+        {
+          faqItems.length ? (
+            <div style="margin-top:10px; display:flex; flex-direction:column; gap:10px;">
+              {faqItems.map((x) => (
+                <details>
+                  <summary style="cursor:pointer; color:var(--fg);">
+                    {x.q}
+                  </summary>
+                  <div style="margin-top:8px; font-size:0.95rem; color:var(--muted); line-height:1.6;">
+                    {x.a}
+                  </div>
+                </details>
+              ))}
+            </div>
+          ) : (
+            <div class="small" style="margin-top:10px;">
+              FAQは準備中です。
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  const contactSection = document.querySelector(".contact-section");
+  if (contactSection) {
+    const title = contactSection.querySelector(".contact-title");
+    const grid = contactSection.querySelector(".contact-grid");
+    const cards = contactSection.querySelectorAll(".contact-card");
+
+    // Title Animation
+    gsap.from(title, {
+      scrollTrigger: {
+        trigger: contactSection,
+        start: "top 80%",
+        toggleActions: "play none none reverse",
+      },
+      y: 30,
+      opacity: 0,
+      duration: 1,
+      ease: "power2.out",
+    });
+
+    // Cards Stagger
+    if (grid && cards.length > 0) {
+      gsap.from(cards, {
+        scrollTrigger: {
+          trigger: grid,
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.2, // Left then Right
+        ease: "power2.out",
+      });
+    }
+  }
+</script>

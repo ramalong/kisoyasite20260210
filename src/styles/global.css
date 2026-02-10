@@ -1,0 +1,130 @@
+﻿:root{
+  --max: 1100px;
+  --pad: 20px;
+
+  /* Palette */
+  /* ~Cherry Blossom #edafb8 */
+  /* ~Powder Petal #f7e1d7 */
+  /* ~Dust Grey #dedbd2 */
+  /* ~Ash Grey #b0c4b1 */
+  /* ~Iron Grey #4a5759 */
+
+  /* Base */
+  --bg: #ffffff;          /* Dust Grey */
+  --surface: #ffffff;     /* Keep white for cards for contrast, or use Powder Petal #f7e1d7 */
+  --fg: #4a5759;          /* Iron Grey */
+  --muted: #272324;       /* Custom muted based on Ash Grey */
+
+  /* Secondary / Lines */
+  --secondary: #f7e1d7;   /* Powder Petal */
+  --line: #ffffff;        /* Ash Grey */
+  --shadow: 0 10px 24px rgba(74, 87, 89, 0.1);
+
+  /* Accent (Primary) */
+  --accent: #edafb8;      /* Cherry Blossom */
+  --accent-weak: rgba(237, 175, 184, 0.2);
+  --accent-ink: #ffffff;
+
+  /* Sub */
+  --sub: #f7e1d7;         /* Powder Petal */
+  --sub-ink: #4a5759;     /* Iron Grey */
+
+  /* Mark / Pop */
+  --mark: #F96E5B;        /* Keep or update if needed */
+
+  /* Components */
+  --card: #ffffff;
+}
+
+
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;overflow-x:hidden;}
+
+body{
+  font-family: "Yu Gothic Medium", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "Meiryo", sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  line-height: 1.7;
+}
+
+a{color: var(--accent)}
+
+.container{
+  width: min(var(--max), calc(100% - var(--pad)*2));
+  margin: 0 auto;
+}
+
+.section{
+  padding: 64px 0;
+  /* border-top removed as per user request */
+}
+.section:first-child{border-top:none}
+
+/* Mobile: Compact Padding */
+@media (max-width: 768px){
+  .section{ padding: 40px 0; }
+}
+
+.h1{font-size: clamp(28px, 3vw, 44px); line-height: 1.2; margin: 0 0 12px}
+.h2{font-size: clamp(22px, 2.2vw, 30px); margin: 0 0 12px}
+.p{color: var(--muted); margin: 0 0 18px}
+
+.row{display:flex; gap:20px; flex-wrap:wrap}
+
+.card{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 18px;
+  box-shadow: var(--shadow);
+}
+
+.grid-2{display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 20px}
+.grid-3{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px}
+
+@media (max-width: 900px){
+  .grid-2,.grid-3{grid-template-columns: 1fr}
+}
+
+.btn{
+  display:inline-block;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  text-decoration:none;
+  background: transparent;
+  color: var(--fg);
+}
+.btn.primary{
+  border-color: transparent;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+}
+.btn.sub{
+  border-color: transparent;
+  background: var(--sub);
+  color: var(--sub-ink);
+  font-weight: 600;
+}
+
+/* Nav styles removed - delegated to Header.astro */
+
+.badge{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size: 12px; color: var(--muted);
+  background: var(--accent-weak);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.footer{
+  padding: 40px 0;
+  /* border-top: 1px solid var(--line); */
+  color: var(--muted);
+}
+
+
+.small{font-size: 12px; color: var(--muted)}
+

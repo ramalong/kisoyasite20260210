@@ -1,0 +1,88 @@
+---
+/**
+ * BaseLayout.astro
+ * - title / description / canonical / og / twitter を単一管理
+ */
+
+type Props = {
+  pageTitle?: string;        // ページ固有タイトル（省略可）
+  description?: string;      // ページ説明（省略可）
+  canonicalPath?: string;    // "/about" のようなパス（省略可）
+  ogImagePath?: string;      // "/og.png" のようなパス（省略可）
+  noindex?: boolean;         // 開発中ページなどで使用（省略可）
+};
+
+const {
+  pageTitle,
+  description,
+  canonicalPath,
+  ogImagePath,
+  noindex = false,
+} = Astro.props;
+
+// site は 例：src/data/site.json など想定
+import site from "../../content/site.json";
+
+// 1) Title：site.siteName を基準にする（ここが“正本”）
+const title = pageTitle ? `${pageTitle}｜${site.siteName}` : site.siteName;
+
+// 2) Description：ページ > サイト既定
+const metaDescription = description ?? site.description ?? "";
+
+// 3) Canonical：パスが来たらそれを使い、なければ現在URLから生成
+//    （手書きURLは避け、必ずURL結合で生成）
+const canonicalUrl = (() => {
+  if (canonicalPath) return new URL(canonicalPath, site.siteUrl).toString();
+  // Astro.url が使える環境ならこれが最も安全
+  if (Astro.url) return Astro.url.toString();
+  // フォールバック（ビルド設定に依存）
+  return new URL("/", site.siteUrl).toString();
+})();
+
+// 4) OG Image：ページ > サイト既定
+const ogImageUrl = (() => {
+  const path = ogImagePath ?? site.ogImagePath ?? "/og.png";
+  return new URL(path, site.siteUrl).toString();
+})();
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>{title}</title>
+    {metaDescription && <meta name="description" content={metaDescription} />}
+
+    <link rel="canonical" href={canonicalUrl} />
+
+    {/* robots */}
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <meta name="robots" content="index, follow" />
+    )}
+
+    {/* Open Graph */}
+    <meta property="og:site_name" content={site.siteName} />
+    <meta property="og:title" content={title} />
+    {metaDescription && <meta property="og:description" content={metaDescription} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    {/* Twitter */}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {metaDescription && <meta name="twitter:description" content={metaDescription} />}
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    {/* favicon 等はここに集約 */}
+    {/* <link rel="icon" href="/favicon.ico" /> */}
+  </head>
+
+  <body>
+    <slot />
+  </body>
+</html>
