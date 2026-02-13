@@ -1,7 +1,7 @@
 /* --- Base Hero Setup --- */
 .hero-section {
   /* Local Variables */
-  --hero-bg: var(--accent); /* Cherry Blossom */
+  --hero-bg: #b0c4b1;
   --hero-text: #ffffff;
   
   background-color: var(--hero-bg);
@@ -102,7 +102,7 @@ canvas {
 
 .hero-primary {
   background-color: #ffffff;
-  color: var(--accent);
+  color: #b0c4b1;
   box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
@@ -142,3 +142,4 @@ canvas {
     max-width: 280px;
   }
 }
+
